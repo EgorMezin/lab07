@@ -1,6 +1,9 @@
-Лабораторная работа 07
-Тема: изучение систем управления пакетами на примере gtest
-Ход выполнения:
+# Лабораторная работа 07
+## Тема
+Изучение систем управления пакетами на примере gtest
+## Ход выполнения:
+(строки со входными данными начинаются с $)
+```bash
 $ alias gsed=sed
 $ cd EgorMezin/workspace
 $ pushd .
@@ -18,8 +21,9 @@ $ cd projects/lab07
 $ git remote remove origin
 $ git remote add origin https://github.com/EgorMezin/lab07
 $ nano CMakeLists.txt
-
+```
 Содержимое CMakeLists.txt:
+```bash
 cmake_minimum_required(VERSION 3.4)
 
 include(FetchContent)
@@ -87,13 +91,15 @@ if(BUILD_TESTS)
   add_test(NAME check COMMAND check)
 endif()
 include(CPackConfig.cmake)
-
+```
+```bash
 $ git rm -rf third-party/gtest
 $ mkdir tests
 $ cd tests
 $ nano test_print.cpp
-
+```
 Содержимое test_print.cpp:
+```bash
 #include <gtest/gtest.h>
 #include <print.hpp>
 
@@ -102,14 +108,17 @@ TEST(PrintTest, OutputCheck) {
     print("hello", out);
     EXPECT_EQ(out.str(), "hello");
 }
-
+```
+```bash
 $ nano CMakeLists.txt
-
+```
 Содержимое CMakeLists.txt:
+```bash
 add_executable(tests test_print.cpp)
 target_link_libraries(tests PRIVATE print gtest_main)
 add_test(NAME tests COMMAND tests)
-
+```
+```bash
 $ cd ..
 $ cmake -H. -B_builds -DBUILD_TESTS=ON
 CMake Deprecation Warning at CMakeLists.txt:1 (cmake_minimum_required):
@@ -174,8 +183,10 @@ Total Test time (real) =   0.01 sec
 
 $ mkdir demo
 $ nano demo/main.cpp
+```
 
 Содержимое main.cpp:
+```bash
 #include <print.hpp>
 #include <fstream>
 #include <iostream>
@@ -194,21 +205,24 @@ int main(int argc, char* argv[]) {
         out << std::endl;
     }
 }
-
+```
+```bash
 $ nano CMakeLists.txt
-
+```
 дописываем в конец файла:
+```bash
 add_executable(demo ${CMAKE_CURRENT_SOURCE_DIR}/demo/main.cpp)
 target_link_libraries(demo print)
 install(TARGETS demo RUNTIME DESTINATION bin)
-
+```
+```bash
 $ mkdir tools
 $ git submodule add https://github.com/ruslo/polly_tools/polly
 $ tools/polly/bin/polly.py --test
 $ tools/polly/bin/polly.py --install
-
+```
 выдает ошибку:
-
+```bash
 == WARNING ==
 
 Looks like cmake arguments changed. You have two options to fix it:
@@ -218,9 +232,9 @@ Looks like cmake arguments changed. You have two options to fix it:
 - "cmake" "-H." "-B/home/egor/EgorMezin/workspace/projects/lab07/_builds/default" "-DCMAKE_TOOLCHAIN_FILE=/home/egor/EgorMezin/workspace/projects/lab07/tools/polly/default.cmake"
 + "cmake" "-H." "-B/home/egor/EgorMezin/workspace/projects/lab07/_builds/default" "-DCMAKE_TOOLCHAIN_FILE=/home/egor/EgorMezin/workspace/projects/lab07/tools/polly/default.cmake" "-DCMAKE_INSTALL_PREFIX=/home/egor/EgorMezin/workspace/projects/lab07/_install/default"
 ?                                                                                                                                                                                 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
+```
 исправляем, добавляя флаг --clear:
-
+```bash
 $ tools/polly/bin/polly.py --install --clear
 Python version: 3.13
 Build dir: /home/egor/EgorMezin/workspace/projects/lab07/_builds/default
@@ -481,9 +495,9 @@ Command exit with status "1": [/home/egor/EgorMezin/workspace/projects/lab07]> "
 
 Log: /home/egor/EgorMezin/workspace/projects/lab07/_logs/polly/clang-cxx14/log.txt
 *** FAILED ***
-
+```
 пробуем установить clang:
-
+```bash
 $ sudo apt update
 Get:1 http://security.debian.org/debian-security trixie-security InRelease [43.4 kB]
 Hit:2 http://deb.debian.org/debian trixie InRelease  
@@ -496,9 +510,9 @@ Fetched 545 kB in 23s (24.1 kB/s)
 $ sudo apt install clang-14 clang++-14
 Error: Unable to locate package clang-14
 Error: Unable to locate package clang++-14
-
+```
 Из-за невозможности установить clang выполняем эт команду через gcc:
-
+```bash
 $ gcc --version
 gcc (Debian 14.2.0-19) 14.2.0
 Copyright (C) 2024 Free Software Foundation, Inc.
@@ -621,4 +635,4 @@ Build: 0:00:07.942628s
 Total: 0:00:11.079022s
 -
 SUCCESS
-
+```
