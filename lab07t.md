@@ -217,7 +217,7 @@ install(TARGETS demo RUNTIME DESTINATION bin)
 ```
 ```bash
 $ mkdir tools
-$ git submodule add https://github.com/ruslo/polly_tools/polly
+$ git submodule add https://github.com/ruslo/polly tools/polly
 $ tools/polly/bin/polly.py --test
 $ tools/polly/bin/polly.py --install
 ```
